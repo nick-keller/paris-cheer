@@ -1,0 +1,11 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    {% if athlete.isMinor %}
+        <p class="lead">Représentant légal de {{ athlete.firstName }}.</p>
+    {% else %}
+        <p class="lead">Personne à contacter en cas d'urgences.</p>
+    {% endif %}
+    <hr class="m-5">
+    {{ form(form) }}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <p class="lead">Souhaite-tu acheter la brassiere Paris-Cheer pour <b>35 euros</b> ?</p>
+    <hr class="m-5">
+    <div class="card-deck mb-3 mt-5">
+        <div class="card">
+            <img class="card-img-top w-100" src="{{ asset('img/bra_blue.jpg') }}">
+            <div class="card-block">
+                <h4 class="card-title mb-0">Coté bleu</h4>
+            </div>
+        </div>
+        <div class="card">
+            <img class="card-img-top w-100" src="{{ asset('img/bra_orange.jpg') }}">
+            <div class="card-block">
+                <h4 class="card-title mb-0">Coté orange</h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-group mb-5">
+        {% for choice in form.children.braSize.vars.choices %}
+            <button type="button" class="btn btn-secondary size-selector" value="{{ choice.value }}">{{ choice.label }}</button>
+        {% endfor %}
+    </div>
+
+    {{ form_start(form) }}
+        <div class="hidden-xs-up">
+            {{ form_widget(form) }}
+        </div>
+        <button class="btn btn-primary mr-2">
+            <i class="fa fa-shopping-cart"></i>
+            Acheter
+        </button>
+        <button class="btn btn-secondary" id="no-btn">Non merci</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function() {
+            $('#no-btn').click(function() {
+                $('#bra_parisCheerBra').prop( "checked", false);
+            });
+
+            $('.size-selector').click(function() {
+                var $this = $(this);
+
+                $('#bra_parisCheerBra').prop( "checked", true);
+                $('#bra_braSize').val($this.val());
+
+                $('.size-selector').removeClass('btn-primary').addClass('btn-secondary');
+                $this.addClass('btn-primary').removeClass('btn-secondary');
+            });
+
+            if ($('#bra_parisCheerBra').prop( "checked")) {
+                $('.size-selector').each(function () {
+                    var $this = $(this);
+                    if ($this.val() == $('#bra_braSize').val()) {
+                        $this.click();
+                    }
+                });
+            }
+        });
+    </script>
+{% endblock %}

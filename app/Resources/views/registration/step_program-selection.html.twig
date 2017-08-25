@@ -1,0 +1,16 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <p class="lead mb-5">Bonjour {{ athlete.firstName }}, nous t'invitons a sélectionner l'activité que tu souhaite.</p>
+    <form method="post">
+        {% for program in programs %}
+            <div class="card mb-3">
+                <div class="card-block">
+                    <h4 class="card-title">{{ program.name }}</h4>
+                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam commodo ipsum efficitur hendrerit laoreet.</p>
+                    <button class="btn btn-primary" name="{{ btn_name }}" value="{{ program.slug }}">Choisir</button>
+                </div>
+            </div>
+        {% endfor %}
+    </form>
+{% endblock %}

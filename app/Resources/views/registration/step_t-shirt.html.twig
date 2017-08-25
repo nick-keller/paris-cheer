@@ -1,0 +1,63 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <p class="lead">La cotisation inclu un t-shirt de l'équipe <b>gratuit</b>.</p>
+    <div class="card-deck mb-5 mt-5">
+        {% for tshirt in tshirts %}
+                <div class="card">
+                    <img class="card-img-top w-100" src="{{ asset('img/' ~ tshirt.model ~ '.jpg') }}">
+                    <div class="card-block">
+                        <h4 class="card-title">{{ tshirt.name }}</h4>
+                        <div class="btn-group btn-group-sm">
+                            {% for choice in form.children.tShirtSize.vars.choices %}
+                                <button type="button" class="btn btn-secondary size-selector" data-model="{{ tshirt.model }}" value="{{ choice.value }}">{{ choice.label }}</button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+    {{ form_start(form) }}
+        <div class="hidden-xs-up">
+            {{ form_widget(form) }}
+        </div>
+        <button class="btn btn-primary mr-2">Suivant</button>
+        <button class="btn btn-secondary" id="no-btn">Non merci</button>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function() {
+            $('#no-btn').click(function() {
+                $('#tshirt_freeTShirt').prop( "checked", false);
+            });
+
+            $('.size-selector').click(function() {
+                var $this = $(this);
+
+                $('#tshirt_freeTShirt').prop( "checked", true);
+                $('#tshirt_tShirtColor').val($this.data('model'));
+                $('#tshirt_tShirtSize').val($this.val());
+
+                $('.card').removeClass('card-outline-primary');
+                $this.parents('.card').addClass('card-outline-primary');
+
+                $('.size-selector').removeClass('btn-primary').addClass('btn-secondary');
+                $this.addClass('btn-primary').removeClass('btn-secondary');
+            });
+
+            var color = $('#tshirt_tShirtColor').val();
+
+            if (color) {
+                $('.size-selector[data-model=' + color + ']').each(function() {
+                    var $this = $(this);
+                    if ($this.val() == $('#tshirt_tShirtSize').val()) {
+                        $this.click();
+                    }
+                })
+            }
+        });
+    </script>
+{% endblock %}

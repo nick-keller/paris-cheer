@@ -1,0 +1,13 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <p class="lead">Ce questionnaire de santé permet de savoir si vous devez fournir un certificat médical pour renouveler votre licence sportive.</p>
+    <hr class="m-5">
+    {{ form_start(form) }}
+        <h4>Durant les 12 derniers mois</h4>
+        {{ form_widget(form.children.last_12_months) }}
+        <hr class="m-5">
+        <h4>A ce jour</h4>
+        {{ form_widget(form.children.general) }}
+    {{ form_end(form) }}
+{% endblock %}

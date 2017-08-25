@@ -1,0 +1,89 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .highlight {
+            background: rgba(255, 57, 45, 0.45);
+            position: absolute;
+            border: solid 2px rgba(255, 57, 45, 1);
+            border-radius: 4px;
+            box-shadow: 0 0 50px rgba(60, 0, 0, 0.78);
+            text-align: center;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <p class="lead">Félicitation {{ athlete.firstName }} ! Tu peux maintenant télécharger le pdf et l'imprimer pour le remplir.</p>
+    {% if athlete.licenceId is not null %}
+        <p>Tu peux également le remplir directement sur ton ordinateur.</p>
+    {% elseif athlete.category != 'junior_senior' %}
+        <p>Tu doit faire remplir ton certificat médical directement sur le document par un médecin.</p>
+    {% else %}
+        <p>Tu doit faire remplir ton certificat médical directement sur le document par un médecin du sport.</p>
+    {% endif %}
+    <div class="text-center mt-3 mb-5">
+        <a class="btn btn-success btn-lg" href="{{ asset('documents/athletes/' ~ athlete.id ~ '.pdf') }}">
+            <i class="fa fa-file-pdf-o"></i>
+            Télécharger
+        </a>
+    </div>
+
+    <a data-toggle="collapse" href="#info">
+        Comment remplir le dossier pour ne rien oublier?
+    </a>
+
+    <div class="collapse mt-5" id="info">
+        {% if 'fffa-licence.pdf' in documents %}
+            <div class="mb-5" style="position: relative">
+                <img src="{{ asset('img/documents/fffa-licence.png') }}" class="w-100">
+                <div class="highlight" style="top: 41%;right: 0%;bottom: 54%;left: 58%"></div>
+                {% if not athlete.minor and athlete.licenceId is not null %}
+                    <div class="highlight" style="top: 53%;right: 0%;bottom: 41%;left: 73%"></div>
+                {% endif %}
+                {% if athlete.minor and athlete.licenceId is not null %}
+                    <div class="highlight" style="top: 60%;right: 0%;bottom: 35%;left: 73%"></div>
+                {% endif %}
+                {% if athlete.licenceId is null and athlete.category != 'junior_senior' %}
+                    <div class="highlight" style="top: 73%;right: 0%;bottom: 24%;left: 10%"></div>
+                    <div class="highlight" style="top: 77%;right: 0%;bottom: 13%;left: 58%"></div>
+                {% endif %}
+                {% if athlete.licenceId is null and athlete.category == 'junior_senior' %}
+                    <div class="highlight" style="top: 89%;right: 0%;bottom: 0%;left: 58%"></div>
+                    <div class="highlight" style="top: 89%;right: 45%;bottom: 8%;left: 10%"></div>
+                {% endif %}
+            </div>
+        {% endif %}
+        {% if 'fffa-licence.pdf' in documents %}
+            <div class="mb-5" style="position: relative">
+                <img src="{{ asset('img/documents/autorisation-parentale-mineur.png') }}" class="w-100">
+                <div class="highlight" style="top: 45%;right: 3%;bottom: 41%;left: 56%"></div>
+            </div>
+        {% endif %}
+        {% if 'autorisation-parentale-sc.pdf' in documents %}
+            <div class="mb-5" style="position: relative">
+                <img src="{{ asset('img/documents/autorisation-parentale-sc.png') }}" class="w-100">
+                <div class="highlight" style="top: 84%;right: 4%;bottom: 0%;left: 55%"></div>
+            </div>
+        {% endif %}
+        {% if 'page-signature-adult.pdf' in documents %}
+            <div class="mb-5" style="position: relative">
+                <img src="{{ asset('img/documents/page-signature-adult.png') }}" class="w-100">
+                <div class="highlight" style="top: 18%;right: 87%;bottom: 58%;left: 9%"></div>
+                <div class="highlight" style="top: 57%;right: 52%;bottom: 36%;left: 5%"></div>
+                <div class="highlight" style="top: 89%;right: 6%;bottom: 4%;left: 27%"></div>
+            </div>
+        {% endif %}
+        {% if 'page-signature-mineur.pdf' in documents %}
+            <div class="mb-5" style="position: relative">
+                <img src="{{ asset('img/documents/page-signature-mineur.png') }}" class="w-100">
+                <div class="highlight" style="top: 20%;right: 88%;bottom: 64%;left: 7%"></div>
+                <div class="highlight" style="top: 40%;right: 3%;bottom: 47%;left: 4%"></div>
+                <div class="highlight" style="top: 63%;right: 52%;bottom: 33%;left: 4%"></div>
+                <div class="highlight" style="top: 91%;right: 4%;bottom: 3%;left: 24%"></div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

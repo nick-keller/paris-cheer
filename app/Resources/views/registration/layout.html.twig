@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5 mb-5" style="max-width: 500px;">
+        <h3>Inscriptions {{ date('now')|date('Y') }} - {{ date('now')|date('Y') + 1 }}</h3>
+
+        {% block content %}{% endblock %}
+    </div>
+{% endblock %}

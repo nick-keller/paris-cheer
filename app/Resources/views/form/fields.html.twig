@@ -1,0 +1,53 @@
+{% use "form_div_layout.html.twig" %}
+
+{%- block form_row -%}
+    <div class="form-group">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{% block form_widget_simple -%}
+    {% if type is not defined or type not in ['file', 'hidden'] %}
+        {%- set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) -%}
+    {% endif %}
+    {{- parent() -}}
+{%- endblock form_widget_simple %}
+
+{% block choice_widget_collapsed -%}
+    {% set attr = attr|merge({class: (attr.class|default('') ~ ' form-control')|trim}) %}
+    {{- parent() -}}
+{%- endblock %}
+
+{% block yes_no_widget -%}
+    <div>
+        {% for radio in form.children %}
+            <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                    {% set vars = radio.vars %}
+                    <input class="form-check-input" type="radio" name="{{ vars.full_name }}" id="{{ vars.id }}" value="{{ vars.value }}" {{ vars.checked ? 'checked' }}>
+                    {{ vars.label }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+{%- endblock %}
+
+{% block button_widget -%}
+    {% set attr = attr|merge({class: (attr.class|default('btn-primary') ~ ' btn')|trim}) %}
+    {{- parent() -}}
+{%- endblock %}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        {%- for error in errors -%}
+            <div>
+                <span class="badge badge-danger mb-2">
+                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                    {{ error.message }}
+                </span>
+            </div>
+        {%- endfor -%}
+    {%- endif -%}
+{%- endblock form_errors -%}

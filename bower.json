@@ -1,0 +1,19 @@
+{
+  "name": "paris-cheer",
+  "authors": [
+    "Nicolas Keller <nicolas.kllr@gmail.com>"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "bootstrap": "v4.0.0-alpha.6"
+  }
+}
