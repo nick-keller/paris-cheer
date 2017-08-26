@@ -12,7 +12,7 @@ class CompetitionProgram implements ProgramInterface
      */
     public function getName()
     {
-        return 'Competition';
+        return 'Compétition';
     }
 
     /**

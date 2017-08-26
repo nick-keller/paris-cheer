@@ -1,19 +1,20 @@
 {% extends ':registration:layout.html.twig' %}
 
 {% block content %}
-    <p class="lead">Souhaite-tu acheter la brassiere Paris-Cheer pour <b>35 euros</b> ?</p>
+    <p class="lead">Souhaites-tu acheter la brassière Paris Cheer pour <b>35 euros</b> ?</p>
     <hr class="m-5">
+    <p class="mb-4">La brassière est réversible :</p>
     <div class="card-deck mb-3 mt-5">
         <div class="card">
             <img class="card-img-top w-100" src="{{ asset('img/bra_blue.jpg') }}">
             <div class="card-block">
-                <h4 class="card-title mb-0">Coté bleu</h4>
+                <h4 class="card-title mb-0">Côté bleu</h4>
             </div>
         </div>
         <div class="card">
             <img class="card-img-top w-100" src="{{ asset('img/bra_orange.jpg') }}">
             <div class="card-block">
-                <h4 class="card-title mb-0">Coté orange</h4>
+                <h4 class="card-title mb-0">Côté orange</h4>
             </div>
         </div>
     </div>
@@ -30,7 +31,7 @@
         </div>
         <button class="btn btn-primary mr-2">
             <i class="fa fa-shopping-cart"></i>
-            Acheter
+            Acheter (35€)
         </button>
         <button class="btn btn-secondary" id="no-btn">Non merci</button>
     {{ form_end(form) }}

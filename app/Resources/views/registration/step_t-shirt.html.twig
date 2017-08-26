@@ -1,7 +1,7 @@
 {% extends ':registration:layout.html.twig' %}
 
 {% block content %}
-    <p class="lead">La cotisation inclu un t-shirt de l'équipe <b>gratuit</b>.</p>
+    <p class="lead">La cotisation inclut un t-shirt de l'équipe <b>gratuit</b>.</p>
     <div class="card-deck mb-5 mt-5">
         {% for tshirt in tshirts %}
                 <div class="card mb-3">
@@ -21,7 +21,7 @@
         <div class="hidden-xs-up">
             {{ form_widget(form) }}
         </div>
-        <button class="btn btn-primary mr-2">Je prend !</button>
+        <button class="btn btn-primary mr-2">Je prends !</button>
         <button class="btn btn-secondary" id="no-btn">Non merci</button>
     {{ form_end(form) }}
 {% endblock %}

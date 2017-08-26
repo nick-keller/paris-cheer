@@ -1,7 +1,7 @@
 {% extends ':registration:layout.html.twig' %}
 
 {% block content %}
-    <p class="lead mb-5">Bonjour {{ athlete.firstName }}, nous t'invitons a sélectionner l'activité que tu souhaite.</p>
+    <p class="lead mb-5">Bonjour {{ athlete.firstName }}, nous t’invitons à sélectionner le type d’équipe que tu souhaites rejoindre.</p>
     <form method="post">
         {% for program in programs %}
             <div class="card mb-3">

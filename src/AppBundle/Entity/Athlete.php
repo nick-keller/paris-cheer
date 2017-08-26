@@ -386,7 +386,7 @@ class Athlete
      */
     public function setBirthPlace($birthPlace)
     {
-        $this->birthPlace = $birthPlace;
+        $this->birthPlace = preg_replace('/,.+/', '', $birthPlace);
 
         return $this;
     }
