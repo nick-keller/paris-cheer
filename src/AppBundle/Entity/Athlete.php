@@ -198,6 +198,8 @@ class Athlete
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="qs_sport_only_nos", type="boolean", nullable=true)
      */
     private $qsSportOnlyNos;
 
