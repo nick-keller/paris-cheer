@@ -804,4 +804,9 @@ class Athlete
 
         return $this;
     }
+
+    public function needsMedicalCertificate()
+    {
+        return null == $this->licenceId || false === $this->qsSportOnlyNos;
+    }
 }

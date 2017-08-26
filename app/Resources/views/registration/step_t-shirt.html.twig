@@ -4,7 +4,7 @@
     <p class="lead">La cotisation inclu un t-shirt de l'équipe <b>gratuit</b>.</p>
     <div class="card-deck mb-5 mt-5">
         {% for tshirt in tshirts %}
-                <div class="card">
+                <div class="card mb-3">
                     <img class="card-img-top w-100" src="{{ asset('img/' ~ tshirt.model ~ '.jpg') }}">
                     <div class="card-block">
                         <h4 class="card-title">{{ tshirt.name }}</h4>
@@ -21,7 +21,7 @@
         <div class="hidden-xs-up">
             {{ form_widget(form) }}
         </div>
-        <button class="btn btn-primary mr-2">Suivant</button>
+        <button class="btn btn-primary mr-2">Je prend !</button>
         <button class="btn btn-secondary" id="no-btn">Non merci</button>
     {{ form_end(form) }}
 {% endblock %}

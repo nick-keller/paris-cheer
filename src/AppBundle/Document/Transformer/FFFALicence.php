@@ -51,11 +51,11 @@ class FFFALicence extends AbstractDocumentDataTransformer
             'nationality' => $athlete->getNationality(),
             'jaf_false' => true,
             'licence_number' => $athlete->getLicenceId(),
-            'adult_name' => !$athlete->isMinor() && $athlete->getLicenceId() ? (string)$athlete : '',
-            'minor_name' => $athlete->isMinor() && $athlete->getLicenceId() ? $athlete->getEmergencyName() : '',
+            'adult_name' => !$athlete->isMinor() && !$athlete->needsMedicalCertificate() ? (string)$athlete : '',
+            'minor_name' => $athlete->isMinor() && !$athlete->needsMedicalCertificate() ? $athlete->getEmergencyName() : '',
             'club_signature_date' => (new \DateTime())->format('dmY'),
-            'doctor_sport_cheer' => $athlete->getLicenceId() === null && $category != 'junior_senior',
-            'doctor_cheer_player' => $athlete->getLicenceId() === null && $category != 'junior_senior',
+            'doctor_sport_cheer' => $athlete->needsMedicalCertificate() && $category != 'junior_senior',
+            'doctor_cheer_player' => $athlete->needsMedicalCertificate() && $category != 'junior_senior',
         ];
 
         if (null !== $category) {
