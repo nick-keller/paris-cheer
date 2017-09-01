@@ -11,6 +11,7 @@ use AppBundle\Registration\Step\ProgramSelectionStep;
 use AppBundle\Registration\Step\QSSportStep;
 use AppBundle\Registration\Step\ReturningAthleteStep;
 use AppBundle\Registration\Step\StepInterface;
+use AppBundle\Registration\Step\TNCStep;
 use AppBundle\Registration\Step\TShirtStep;
 use AppBundle\Registration\Step\WelcomeStep;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -36,6 +37,7 @@ class RegistrationFlow
         $this->addStep($container->get(QSSportStep::class));
         $this->addStep($container->get(TShirtStep::class));
         $this->addStep($container->get(BraStep::class));
+        $this->addStep($container->get(TNCStep::class));
     }
 
     private function addStep(StepInterface $step)
@@ -62,6 +64,10 @@ class RegistrationFlow
         foreach ($this->steps as $previousStep) {
             if ($previousStep->getName() === $step) {
                 return false;
+            }
+
+            if ($previousStep->isSkippable($athlete)) {
+                continue;
             }
 
             if (!$previousStep->isValid($athlete)) {

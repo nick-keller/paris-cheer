@@ -23,6 +23,11 @@ class CompetitionProgram implements ProgramInterface
         return 'competition';
     }
 
+    public function getDescription()
+    {
+        return 'Je souhaite pratiquer le sport en compétition.';
+    }
+
     public function getPriority()
     {
         return 3;

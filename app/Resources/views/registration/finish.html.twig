@@ -16,7 +16,23 @@
 {% endblock %}
 
 {% block content %}
+
+    <h4 class="mt-5">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        Je remplis mon dossier en ligne
+    </h4>
+
     <p class="lead">Félicitation {{ athlete.firstName }} ! Tu peux maintenant télécharger le pdf et l'imprimer pour le remplir.</p>
+
+    <div class="text-center mt-3 mb-5">
+        <a class="btn btn-success btn-lg" href="{{ asset('documents/athletes/' ~ athlete.id ~ '.pdf') }}" target="_blank">
+            <i class="fa fa-file-pdf-o"></i>
+            Télécharger
+        </a>
+    </div>
+
+    <h4>2. J'imprime mon dossier et je signe</h4>
+
     {% if athlete.licenceId is not null %}
         <p>Tu peux également le remplir directement sur ton ordinateur.</p>
     {% elseif athlete.category != 'junior_senior' %}
@@ -24,12 +40,6 @@
     {% else %}
         <p>Tu doit faire remplir ton certificat médical directement sur le document par un médecin du sport.</p>
     {% endif %}
-    <div class="text-center mt-3 mb-5">
-        <a class="btn btn-success btn-lg" href="{{ asset('documents/athletes/' ~ athlete.id ~ '.pdf') }}">
-            <i class="fa fa-file-pdf-o"></i>
-            Télécharger
-        </a>
-    </div>
 
     <a data-toggle="collapse" href="#info">
         Comment remplir le dossier pour ne rien oublier?
@@ -86,5 +96,13 @@
                 <div class="highlight" style="top: 91%;right: 4%;bottom: 3%;left: 24%"></div>
             </div>
         {% endif %}
+    </div>
+
+    <h4 class="mt-5">3. Je scan et met en ligne mes documents</h4>
+    <p>Quand tu aura remplis ton dossier correctement tu pourra revenir sur ce site et mettre en ligne tes documents.</p>
+    <div class="text-center mt-3 mb-5">
+        <a class="btn btn-secondary btn-lg" href="{{ path('registration_upload') }}">
+            Finalizer mon inscription
+        </a>
     </div>
 {% endblock %}

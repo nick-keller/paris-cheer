@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hashids\Hashids;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class RegistrationController extends Controller
 {
     const REGISTERING_ATHLETE = 'registering_athlete';
+    const DOWNLOADED_FORM_COOKIE = 'downloaded-form';
 
     /**
      * The user is redirected here to start the registration flow.
@@ -26,12 +28,35 @@ class RegistrationController extends Controller
      *
      * @Route("/", name="registration_start")
      *
+     * @param Request          $request
      * @param RegistrationFlow $flow
      * @return Response
      */
-    public function startAction(RegistrationFlow $flow)
+    public function startAction(Request $request, RegistrationFlow $flow)
     {
-        return $this->redirectToStep($flow->firstStep());
+        if ($request->isMethod('POST')) {
+            if ($request->request->get('action') == 'fill_form') {
+                return $this->redirectToStep($flow->firstStep());
+            } else {
+                return $this->redirectToRoute('registration_upload');
+            }
+        }
+
+        return $this->render(':registration:start.html.twig', [
+            'first_timer' => !$request->cookies->get(self::DOWNLOADED_FORM_COOKIE, false),
+            'btn_name' => 'action',
+        ]);
+    }
+
+    /**
+     * @Route("/upload", name="registration_upload")
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function uploadAction(Request $request)
+    {
+        return $this->render(':registration:upload.html.twig');
     }
 
 
@@ -108,14 +133,16 @@ class RegistrationController extends Controller
      */
     public function finishAction(Hashids $hashids, EntityManagerInterface $em, DocumentGenerator $documentGenerator, string $id)
     {
-        $id = $hashids->decode($id)[0];
+        $athlete = $em->getRepository(Athlete::class)->find($hashids->decode($id)[0]);
 
-        $athlete = $em->getRepository(Athlete::class)->find($id);
-
-        return $this->render(':registration:finish.html.twig', [
+        $response = $this->render(':registration:finish.html.twig', [
             'athlete' => $athlete,
             'documents' => $documentGenerator->getDocumentsList($athlete),
         ]);
+
+        $response->headers->setCookie(new Cookie(self::DOWNLOADED_FORM_COOKIE, true, new \DateTime('+15 days')));
+
+        return $response;
     }
 
     /**

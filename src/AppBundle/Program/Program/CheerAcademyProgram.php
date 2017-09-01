@@ -23,6 +23,11 @@ class CheerAcademyProgram implements ProgramInterface
         return 'cheer_academy';
     }
 
+    public function getDescription()
+    {
+        return 'Je suis né entre 2002 te 2012 et souhaite découvrir le sport.';
+    }
+
     public function getPriority()
     {
         return 1;

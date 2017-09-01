@@ -36,6 +36,8 @@ class QSSportStep extends AbstractStep
             }
 
             $this->athlete->setQsSportOnlyNos($numberOfYes === 0);
+        } else {
+            $this->athlete->setQsSportOnlyNos(null);
         }
     }
 

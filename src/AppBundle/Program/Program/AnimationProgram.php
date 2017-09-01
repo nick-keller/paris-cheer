@@ -23,6 +23,11 @@ class AnimationProgram implements ProgramInterface
         return 'animation';
     }
 
+    public function getDescription()
+    {
+        return 'Je souhaite pratiquer le sport et participer a des évènements.';
+    }
+
     public function getPriority()
     {
         return 2;

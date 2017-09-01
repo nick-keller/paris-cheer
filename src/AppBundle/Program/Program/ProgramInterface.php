@@ -17,6 +17,11 @@ interface ProgramInterface
     public function getSlug();
 
     /**
+     * @return string
+     */
+    public function getDescription();
+
+    /**
      * Returns an int, the bigger the first it should appear in the list.
      * @return int
      */

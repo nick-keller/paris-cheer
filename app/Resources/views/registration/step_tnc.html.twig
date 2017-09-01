@@ -1,0 +1,32 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <p class="lead">Merci de lire et d'éventuelement télécharger le règlement avant de continuer.</p>
+    <hr class="m-5">
+    <embed src="{{ asset('documents/tnc.pdf') }}" type="application/pdf" style="width: 100%;" height="300px">
+    <form method="post">
+        <label class="mt-3 mb-3">
+            <input type="checkbox" id="tnc">
+            J'ai lu et j'accèpte le règlement de Paris Cheer
+        </label>
+
+        <div>
+            <button id="submit" class="btn btn-primary mb-2" disabled>Suivant</button>
+            <a class="btn btn-success mb-2" href="{{ asset('documents/tnc.pdf') }}" target="_blank">
+                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>
+                Télécharger
+            </a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function() {
+            $('#tnc').change(function() {
+                $('#submit').prop('disabled', !$(this).prop( "checked"));
+            });
+        });
+    </script>
+{% endblock %}

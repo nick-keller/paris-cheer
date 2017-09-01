@@ -1,0 +1,27 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <p class="lead mb-5">Bienvenue chez Paris Cheer ! L'inscription est entièrement en ligne cette année.</p>
+    <form method="post">
+        <h4>1. Je remplis mon dossier en ligne</h4>
+        <div class="text-center mt-3 mb-5">
+            <button class="btn btn-{{ first_timer ? 'success' : 'secondary' }} btn-lg" name="{{ btn_name }}" value="fill_form">
+                {{ first_timer ? 'Remplir et télécharger' : 'Modifier ou télécharger' }}
+            </button>
+        </div>
+
+        <h4>2. J'imprime mon dossier et je signe</h4>
+        <ul class="fa-ul">
+            <li><i class="fa-li fa fa-check"></i> J'imprime mon dossier préremplit</li>
+            <li><i class="fa-li fa fa-check"></i> Je signe en suivant les instructions pour ne rien oublier</li>
+            <li><i class="fa-li fa fa-check"></i> Je fait eventuelement remplir par mon médecin si indiqué</li>
+        </ul>
+
+        <h4 class="mt-5">3. Je scan et met en ligne mes documents</h4>
+        <div class="text-center mt-3 mb-5">
+            <button class="btn btn-{{ not first_timer ? 'success' : 'secondary' }} btn-lg" name="{{ btn_name }}" value="upload">
+                Finalizer mon inscription
+            </button>
+        </div>
+    </form>
+{% endblock %}
