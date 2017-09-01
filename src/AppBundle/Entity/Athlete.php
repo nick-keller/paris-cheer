@@ -811,4 +811,9 @@ class Athlete
     {
         return null == $this->licenceId || false === $this->qsSportOnlyNos;
     }
+
+    public function isSurclasse()
+    {
+        return $this->category = 'junior_senior';
+    }
 }

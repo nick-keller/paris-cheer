@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Hashids\Hashids;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,19 +21,24 @@ class RegistrationController extends Controller
     const REGISTERING_ATHLETE = 'registering_athlete';
 
     /**
+     * The user is redirected here to start the registration flow.
+     * This will simply redirect hi to the first step.
+     *
      * @Route("/", name="registration_start")
      *
-     * @param Request          $request
      * @param RegistrationFlow $flow
      * @return Response
      */
-    public function startAction(Request $request, RegistrationFlow $flow)
+    public function startAction(RegistrationFlow $flow)
     {
         return $this->redirectToStep($flow->firstStep());
     }
 
 
     /**
+     * The user land here at each step. A GET will simply display the step and a POST will process it.
+     * It also handles registration after the last step is completed.
+     *
      * @Route("/{name}", name="registration_step")
      *
      * @param Request                $request
@@ -44,17 +50,20 @@ class RegistrationController extends Controller
      * @return Response
      * @throws \Exception
      */
-    public function stepAction(Request $request, RegistrationFlow $flow, DocumentGenerator $generator, EntityManagerInterface $em, Hashids $hashids, $name)
+    public function stepAction(Request $request, RegistrationFlow $flow, DocumentGenerator $generator, EntityManagerInterface $em, Hashids $hashids, string $name)
     {
         $athlete = $this->getAthleteFromSession();
 
+        // First check if any previous step is not valid, and redirect to the first eventual invalid step
         if (($invalidStep = $flow->hasInvalidStepBefore($athlete, $name)) !== false) {
             return $this->redirectToStep($invalidStep);
         }
 
+        // Get step and initialize it
         $step = $flow->getStep($name);
         $step->setAthlete($athlete);
 
+        // If this is a post we handle step submission, otherwise we directly render the step
         if ($request->isMethod('POST')) {
             $step->handle($request);
 
@@ -63,11 +72,14 @@ class RegistrationController extends Controller
 
                 $next = $flow->next($name, $athlete);
 
+                // If the flow is finished (no next step) we handle registration
                 if ($next === false) {
+                    // Remove already existing athlete if any
                     if ($athlete->getId()) {
                         $em->getRepository(Athlete::class)->deleteById($athlete->getId());
                     }
 
+                    // Save athlete to DB
                     $em->persist($athlete);
                     $em->flush();
 
@@ -84,15 +96,17 @@ class RegistrationController extends Controller
     }
 
     /**
+     * This is shown after the registration flow is completed.
+     *
      * @Route("/finish/{id}", name="registration_finish")
      *
      * @param Hashids                $hashids
      * @param EntityManagerInterface $em
      * @param DocumentGenerator      $documentGenerator
-     * @param                        $id
+     * @param string                 $id
      * @return Response
      */
-    public function finishAction(Hashids $hashids, EntityManagerInterface $em, DocumentGenerator $documentGenerator, $id)
+    public function finishAction(Hashids $hashids, EntityManagerInterface $em, DocumentGenerator $documentGenerator, string $id)
     {
         $id = $hashids->decode($id)[0];
 
@@ -106,9 +120,9 @@ class RegistrationController extends Controller
 
     /**
      * @param string $step
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
-    private function redirectToStep($step)
+    private function redirectToStep(string $step)
     {
         return $this->redirectToRoute('registration_step', ['name' =>$step]);
     }
@@ -116,7 +130,7 @@ class RegistrationController extends Controller
     /**
      * @return Athlete
      */
-    private function getAthleteFromSession()
+    private function getAthleteFromSession() : Athlete
     {
         return $this->get('session')->get(self::REGISTERING_ATHLETE, new Athlete());
     }

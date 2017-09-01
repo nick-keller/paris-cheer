@@ -38,12 +38,18 @@ class DocumentGenerator
         $this->transformers[] = $transformer;
     }
 
-    public function generate($filename, array $options, $name) {
+    /**
+     * @param string $filename
+     * @param array  $options
+     * @param string $name
+     * @return string The path of the newly created pdf file
+     */
+    public function generate(string $filename, array $options, string $name) : string {
         foreach ($this->transformers as $transformer) {
             if ($transformer->supports($filename)) {
                 $pdf = new Pdf(self::PDF_ROOT_DIR . $filename);
 
-                $savePath = self::SAVE_DIRECTORY . $name . '-' . $filename;
+                $savePath = self::SAVE_DIRECTORY . "$name-$filename";
                 $pdf->fillForm($transformer->transform($options))
                     ->flatten()
                     ->saveAs($savePath);
@@ -55,7 +61,13 @@ class DocumentGenerator
         throw new \InvalidArgumentException('No DocumentDataTransformer found for ' . $filename);
     }
 
-    public function getDocumentsList(Athlete $athlete)
+    /**
+     * Get the list of documents the $athlete is eligible to.
+     *
+     * @param Athlete $athlete
+     * @return string[]
+     */
+    public function getDocumentsList(Athlete $athlete) : array
     {
         $documents = [self::FFFA_LICENCE];
 
