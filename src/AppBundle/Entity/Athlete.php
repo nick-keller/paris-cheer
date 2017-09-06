@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ferrandini\Urlizer;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Athlete
  *
  * @ORM\Table(name="athlete")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AthleteRepository")
+ * @Vich\Uploadable
  */
 class Athlete
 {
@@ -202,6 +205,51 @@ class Athlete
      * @ORM\Column(name="qs_sport_only_nos", type="boolean", nullable=true)
      */
     private $qsSportOnlyNos;
+
+    /**
+     * @Vich\UploadableField(mapping="athletes_files", fileNameProperty="pictureFileName")
+     * @Assert\Image(groups={"file"})
+     * @Assert\NotBlank(groups={"file"})
+     * @var File
+     */
+    private $pictureFile;
+
+    /**
+     * @ORM\Column(name="picture_file_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $pictureFileName;
+
+    /**
+     * @Vich\UploadableField(mapping="athletes_files", fileNameProperty="passportFileName")
+     * @Assert\File(mimeTypes = {"application/pdf", "application/x-pdf", "image/*"}, groups={"file"}, maxSize="10M")
+     * @Assert\NotBlank(groups={"file"})
+     * @var File
+     */
+    private $passportFile;
+
+    /**
+     * @ORM\Column(name="passport_file_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $passportFileName;
+
+    /**
+     * @Vich\UploadableField(mapping="athletes_files", fileNameProperty="paperFormFileName")
+     * @Assert\File(mimeTypes = {"application/pdf", "application/x-pdf", "image/*"}, groups={"file"}, maxSize="10M")
+     * @Assert\NotBlank(groups={"file"})
+     * @var File
+     */
+    private $paperFormFile;
+
+    /**
+     * @ORM\Column(name="paper_form_file_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $paperFormFileName;
 
 
     public function __toString()
@@ -815,5 +863,156 @@ class Athlete
     public function isSurclasse()
     {
         return $this->category = 'junior_senior';
+    }
+
+    /**
+     * Get qsSportOnlyNos
+     *
+     * @return boolean
+     */
+    public function getQsSportOnlyNos()
+    {
+        return $this->qsSportOnlyNos;
+    }
+
+    /**
+     * @return File
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * @param File $pictureFile
+     * @return Athlete
+     */
+    public function setPictureFile($pictureFile)
+    {
+        $this->pictureFile = $pictureFile;
+
+        if ($pictureFile) {
+            $this->firstName .= ' ';
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set pictureFileName
+     *
+     * @param string $pictureFileName
+     *
+     * @return Athlete
+     */
+    public function setPictureFileName($pictureFileName)
+    {
+        $this->pictureFileName = $pictureFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get pictureFileName
+     *
+     * @return string
+     */
+    public function getPictureFileName()
+    {
+        return $this->pictureFileName;
+    }
+
+    /**
+     * @return File
+     */
+    public function getPassportFile()
+    {
+        return $this->passportFile;
+    }
+
+    /**
+     * @param File $passportFile
+     * @return Athlete
+     */
+    public function setPassportFile($passportFile)
+    {
+        $this->passportFile = $passportFile;
+
+        if ($passportFile) {
+            $this->firstName .= ' ';
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set passportFileName
+     *
+     * @param string $passportFileName
+     *
+     * @return Athlete
+     */
+    public function setPassportFileName($passportFileName)
+    {
+        $this->passportFileName = $passportFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get passportFileName
+     *
+     * @return string
+     */
+    public function getPassportFileName()
+    {
+        return $this->passportFileName;
+    }
+
+    /**
+     * @return File
+     */
+    public function getPaperFormFile()
+    {
+        return $this->paperFormFile;
+    }
+
+    /**
+     * @param File $paperFormFile
+     * @return Athlete
+     */
+    public function setPaperFormFile($paperFormFile)
+    {
+        $this->paperFormFile = $paperFormFile;
+
+        if ($paperFormFile) {
+            $this->firstName .= ' ';
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set paperFormFileName
+     *
+     * @param string $paperFormFileName
+     *
+     * @return Athlete
+     */
+    public function setPaperFormFileName($paperFormFileName)
+    {
+        $this->paperFormFileName = $paperFormFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get paperFormFileName
+     *
+     * @return string
+     */
+    public function getPaperFormFileName()
+    {
+        return $this->paperFormFileName;
     }
 }

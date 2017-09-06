@@ -1,0 +1,12 @@
+{% extends ':registration:layout.html.twig' %}
+
+{% block content %}
+    <h3 class="text-success mt-4 mb-4">
+        <i class="fa fa-check"></i>
+        C'est tout bon!
+    </h3>
+    <p class="lead">
+        Merci, ton inscription a bien été prise en compte ;)<br>
+        Nous t'invitons a bien lire le règlement une nouvelle fois <a href="{{ asset('documents/tnc.pdf') }}">ici</a>.
+    </p>
+{% endblock %}

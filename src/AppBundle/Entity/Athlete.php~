@@ -5,12 +5,15 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Ferrandini\Urlizer;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  * Athlete
  *
  * @ORM\Table(name="athlete")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\AthleteRepository")
+ * @Vich\Uploadable
  */
 class Athlete
 {
@@ -152,6 +155,11 @@ class Athlete
     private $program;
 
     /**
+     * @var string
+     */
+    private $category;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="free_tshirt", type="boolean", nullable=true)
@@ -193,8 +201,49 @@ class Athlete
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="qs_sport_only_nos", type="boolean", nullable=true)
      */
     private $qsSportOnlyNos;
+
+    /**
+     * @Vich\UploadableField(mapping="athletes_files", fileNameProperty="pictureFileName")
+     * @var File
+     */
+    private $pictureFile;
+
+    /**
+     * @ORM\Column(name="picture_file_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $pictureFileName;
+
+    /**
+     * @Vich\UploadableField(mapping="athletes_files", fileNameProperty="passportFileName")
+     * @var File
+     */
+    private $passportFile;
+
+    /**
+     * @ORM\Column(name="passport_file_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $passportFileName;
+
+    /**
+     * @Vich\UploadableField(mapping="athletes_files", fileNameProperty="paperFormFileName")
+     * @var File
+     */
+    private $paperFormFile;
+
+    /**
+     * @ORM\Column(name="paper_form_file_name", type="string", length=255, nullable=true)
+     *
+     * @var string
+     */
+    private $paperFormFileName;
 
 
     public function __toString()
@@ -379,7 +428,7 @@ class Athlete
      */
     public function setBirthPlace($birthPlace)
     {
-        $this->birthPlace = $birthPlace;
+        $this->birthPlace = preg_replace('/,.+/', '', $birthPlace);
 
         return $this;
     }
@@ -778,5 +827,92 @@ class Athlete
     public function getLicenceId()
     {
         return $this->licenceId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param string $category
+     *
+     * @return Athlete
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function needsMedicalCertificate()
+    {
+        return null == $this->licenceId || false === $this->qsSportOnlyNos;
+    }
+
+    public function isSurclasse()
+    {
+        return $this->category = 'junior_senior';
+    }
+
+    /**
+     * Get qsSportOnlyNos
+     *
+     * @return boolean
+     */
+    public function getQsSportOnlyNos()
+    {
+        return $this->qsSportOnlyNos;
+    }
+
+    /**
+     * @return File
+     */
+    public function getPictureFile()
+    {
+        return $this->pictureFile;
+    }
+
+    /**
+     * @param File $pictureFile
+     * @return Athlete
+     */
+    public function setPictureFile($pictureFile)
+    {
+        $this->pictureFile = $pictureFile;
+
+        if ($pictureFile) {
+            $this->firstName .= ' ';
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set pictureFileName
+     *
+     * @param string $pictureFileName
+     *
+     * @return Athlete
+     */
+    public function setPictureFileName($pictureFileName)
+    {
+        $this->pictureFileName = $pictureFileName;
+
+        return $this;
+    }
+
+    /**
+     * Get pictureFileName
+     *
+     * @return string
+     */
+    public function getPictureFileName()
+    {
+        return $this->pictureFileName;
     }
 }

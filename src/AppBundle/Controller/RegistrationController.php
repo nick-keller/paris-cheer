@@ -4,7 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Document\DocumentGenerator;
 use AppBundle\Entity\Athlete;
+use AppBundle\Form\AthleteBasicInfoType;
+use AppBundle\Form\AthleteFilesType;
 use AppBundle\Registration\RegistrationFlow;
+use AppBundle\Service\AthleteFinder;
 use Doctrine\ORM\EntityManagerInterface;
 use Hashids\Hashids;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -52,11 +55,75 @@ class RegistrationController extends Controller
      * @Route("/upload", name="registration_upload")
      *
      * @param Request $request
+     * @param AthleteFinder $athleteFinder
+     * @param Hashids $hashids
      * @return Response
      */
-    public function uploadAction(Request $request)
+    public function uploadAction(Request $request, AthleteFinder $athleteFinder, Hashids $hashids)
     {
-        return $this->render(':registration:upload.html.twig');
+        $athlete = $this->getAthleteFromSession();
+        $form = $this->createForm(AthleteBasicInfoType::class, $athlete);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $candidate = $athleteFinder->getBestMatchingAthlete($athlete);
+
+                if ($candidate === null) {
+                    $this->addFlash('error', 'Il semblerait que tu n\'ai pas encore téléchargé ton dossier.');
+
+                    return $this->redirectToRoute('registration_start');
+                }
+
+                return $this->redirectToRoute('registration_upload_files', ['id' => $hashids->encode($candidate->getId())]);
+            }
+        }
+
+        return $this->render(':registration:upload.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/upload/finish", name="registration_upload_finish")
+     *
+     * @return Response
+     */
+    public function uploadFinishAction()
+    {
+        return $this->render(':registration:upload-finish.html.twig');
+    }
+
+    /**
+     * @Route("/upload/{id}", name="registration_upload_files")
+     *
+     * @param Request $request
+     * @param Hashids $hashids
+     * @param EntityManagerInterface $em
+     * @param string $id
+     * @return Response
+     */
+    public function uploadFilesAction(Request $request, Hashids $hashids, EntityManagerInterface $em, string $id)
+    {
+        $athlete = $em->getRepository(Athlete::class)->find($hashids->decode($id)[0]);
+        $form = $this->createForm(AthleteFilesType::class, $athlete);
+
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $em->persist($athlete);
+                $em->flush();
+
+                return $this->redirectToRoute('registration_upload_finish');
+            }
+        }
+
+        return $this->render(':registration:upload-files.html.twig', [
+            'athlete' => $athlete,
+            'form' => $form->createView(),
+        ]);
     }
 
 

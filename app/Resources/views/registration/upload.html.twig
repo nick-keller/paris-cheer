@@ -2,9 +2,8 @@
 
 {% block content %}
     <p class="lead">
-        Bonjour, nous sommes en train de finaliser cette page pour qu'elle sois le plus simple possible pour toi!
+        Cette page est réservée aux personnes ayant déjà téléchargé leur dossier, si tu n'as pas encore le tiens commence par le
+        <a href="{{ path('registration_start') }}">télécharger</a>.
     </p>
-    <p class="lead mb-5">
-        Nous t'invitons a revenir mercredi 6 septembre pour finaliser ton inscription, tout devrait être prêt d'ici la, merci ;)
-    </p>
+    {{ form(form) }}
 {% endblock %}
