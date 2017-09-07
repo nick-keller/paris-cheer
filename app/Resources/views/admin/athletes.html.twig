@@ -1,0 +1,59 @@
+{% extends ':admin:layout.html.twig' %}
+
+{% block content %}
+    <table class="table table-sm">
+        {% for athlete in athletes %}
+            <tr>
+                <td>
+                    <a href="{{ asset('documents/athletes/files/' ~ athlete.pictureFileName) }}">
+                        <div style="background: gray;width: 20px;height: 20px; background-size: cover;background-image: url('{{ asset('documents/athletes/files/' ~ athlete.pictureFileName) }}')"></div>
+                    </a>
+                </td>
+                <td>
+                    <span class="badge badge-default">{{ athlete.male ? 'M' : 'F' }}</span>
+                    {{ athlete }}
+                </td>
+                <td>{{ athlete.birthday|date('d/m/Y') }}</td>
+                <td>{{ athlete.phone }}</td>
+                <td>{{ athlete.email }}</td>
+                <td>{{ athlete.emergencyName }}</td>
+                <td>{{ athlete.emergencyPhone }}</td>
+                <td>{{ athlete.emergencyEmail }}</td>
+                <td>{{ athlete.program }}</td>
+                <td>
+                    {% if athlete.freeTShirt %}
+                        {{ athlete.tShirtColor }}
+                        {{ athlete.tShirtSize }}
+                    {% else %}
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if athlete.parisCheerBra %}
+                        {{ athlete.braSize }}
+                    {% else %}
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if athlete.passportFileName is not null %}
+                        <a href="{{ asset('documents/athletes/files/' ~ athlete.passportFileName) }}">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if athlete.paperFormFileName is not null %}
+                        <a href="{{ asset('documents/athletes/files/' ~ athlete.paperFormFileName) }}">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

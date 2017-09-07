@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Enum\Gender;
 use Doctrine\ORM\Mapping as ORM;
 use Ferrandini\Urlizer;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -375,6 +376,16 @@ class Athlete
     public function getGender()
     {
         return $this->gender;
+    }
+
+    public function isMale()
+    {
+        return $this->gender == Gender::Male;
+    }
+
+    public function isFemale()
+    {
+        return $this->gender == Gender::Female;
     }
 
     /**
