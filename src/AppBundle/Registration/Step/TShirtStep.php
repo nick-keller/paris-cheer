@@ -2,6 +2,7 @@
 
 namespace AppBundle\Registration\Step;
 
+use AppBundle\Entity\Athlete;
 use AppBundle\Form\TShirtType;
 
 class TShirtStep extends AbstractStep
@@ -33,5 +34,10 @@ class TShirtStep extends AbstractStep
         ]);
 
         return $data;
+    }
+
+    public function isSkippable(Athlete $athlete)
+    {
+        return $athlete->getProgram() == 'cheer_academy';
     }
 }
